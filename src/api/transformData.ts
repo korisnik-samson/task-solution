@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import axios from "axios";
-import { ApiResponse, FileUrl, TransformedData } from "../../../task-solution/src/types";
+import { ApiResponse, FileUrl, TransformedData } from "../types";
 import cron from "node-cron";
 
 const router = Router();
@@ -20,7 +20,6 @@ export function transformData(data: ApiResponse): TransformedData {
         // Split the pathname into segments and remove any empty strings
         const pathSegments = url.pathname.split("/").filter(Boolean);
 
-        // Traverse the transformed object and create nested objects as needed
         if (!transformed[ipAddress]) transformed[ipAddress] = [];
 
         let currentLevel = transformed[ipAddress];
@@ -45,7 +44,6 @@ export function transformData(data: ApiResponse): TransformedData {
 
     return transformed;
 }
-
 
 // Fetch and transform data from the external API, after which, cache is updated.
 async function updateCache() {
@@ -77,14 +75,16 @@ router.get('/', (_req: Request, res: Response) => {
         if (now - cacheTimestamp >= CACHE_DURATION) updateCache();
 
     } else {
-        res.status(503).json({ error: 'Service unavailable. Please try again later.' });
+        res.status(503).json({
+            error: 'Service unavailable. Please try again later.'
+        });
 
         // Fetch data and update cache immediately
         updateCache();
     }
 });
 
-// Schedule a background cron-job to update the cache periodically
+// Schedule a background cron-job to update the cache periodically (every minute)
 cron.schedule('* * * * *', () => updateCache());
 
 export default router;
