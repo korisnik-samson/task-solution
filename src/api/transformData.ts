@@ -67,7 +67,7 @@ export async function initCache() {
 }
 
 // Return the cached data immediately, then trigger a background update if the cache is stale.
-router.get('/', (req: Request, res: Response) => {
+router.get('/', (_req: Request, res: Response) => {
     const now = Date.now();
 
     if (cachedData) {
@@ -85,6 +85,6 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 // Schedule a background cron-job to update the cache periodically
-cron.schedule('* * * * *', () => updateCache() );
+cron.schedule('* * * * *', () => updateCache());
 
 export default router;

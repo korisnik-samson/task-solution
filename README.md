@@ -17,8 +17,6 @@ The task is to create endpoint using Node.js (Typescript) that fetches a large d
 
 - **express**: Web framework for Node.js.
 - **axios**: Promise-based HTTP client for making API requests.
-- **ts-node**: TypeScript execution environment for Node.js.
-- **ts-node-dev**: Development tool for running TypeScript with automatic restarts.
 - **nodemon**: Utility for monitoring changes in source files and restarting the server.
 - **node-cron**: Task scheduler for running periodic jobs.
 - **typescript**: JavaScript superset that adds static types.
