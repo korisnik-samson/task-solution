@@ -8,7 +8,7 @@ const apiUrl = process.env.API_URL || "https://rest-test-eight.vercel.app/api/te
 // Cache variables to store transformed data and timestamp
 let cachedData: TransformedData | null = null;
 let cacheTimestamp: number = 0;
-const CACHE_DURATION = Number(process.env.CACHE_DURATION) || 60000; // typecast to number
+const CACHE_DURATION = Number(process.env.CACHE_DURATION) || 60000; // avoid string type
 
 
 export function transformData(data: ApiResponse): TransformedData {
