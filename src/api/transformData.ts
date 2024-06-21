@@ -1,15 +1,14 @@
-import { Router, Request, Response } from "express";
+import { Request, Response, Router } from "express";
 import axios from "axios";
-import { ApiResponse, FileUrl, TransformedData } from "../types";
+import { ApiResponse, FileUrl, TransformedData } from "../../../task-solution/src/types";
+import cron from "node-cron";
 
 const router = Router();
 const apiUrl = process.env.API_URL || "https://rest-test-eight.vercel.app/api/test";
 
-// Cache variables to store transformed data and timestamp
 let cachedData: TransformedData | null = null;
 let cacheTimestamp: number = 0;
-const CACHE_DURATION = Number(process.env.CACHE_DURATION) || 60000; // avoid string type
-
+const CACHE_DURATION = Number(process.env.CACHE_DURATION) || 60000;
 
 export function transformData(data: ApiResponse): TransformedData {
     const transformed: TransformedData = {};
@@ -28,9 +27,8 @@ export function transformData(data: ApiResponse): TransformedData {
 
         pathSegments.forEach((segment, i) => {
             if (i === pathSegments.length - 1) {
-                // Adding file name at the last level
+                // Add file name at the last level
                 currentLevel.push(segment);
-
             } else {
                 // Find or create the next level in the nested structure
                 let nextLevel = currentLevel.find(level => typeof level === "object" && level.hasOwnProperty(segment));
@@ -48,29 +46,45 @@ export function transformData(data: ApiResponse): TransformedData {
     return transformed;
 }
 
-router.get('/', async (req: Request, res: Response) => {
-    const now = Date.now();
 
-    // Checks data validity
-    if (cachedData && now - cacheTimestamp < CACHE_DURATION) {
-        return res.json(cachedData);
-    }
-
+// Fetch and transform data from the external API, after which, cache is updated.
+async function updateCache() {
     try {
         const response = await axios.get<ApiResponse>(apiUrl);
-        const transformedData = transformData(response.data);
+        cachedData = transformData(response.data);
+        cacheTimestamp = Date.now();
 
-        // Update cache data
-        cachedData = transformedData;
-
-        // Update cache timestamp
-        cacheTimestamp = now;
-        res.json(transformedData);
+        console.log('Cache updated at', new Date(cacheTimestamp).toLocaleString());
 
     } catch (error) {
         console.error('Error fetching data:', error);
-        res.status(500).json({ error: 'Failed to fetch data from API' });
+    }
+}
+
+// avoid wait times by initiating the cache - fetch from external API
+export async function initCache() {
+    await updateCache();
+}
+
+// Return the cached data immediately, then trigger a background update if the cache is stale.
+router.get('/', (req: Request, res: Response) => {
+    const now = Date.now();
+
+    if (cachedData) {
+        res.json(cachedData);
+
+        // Trigger background update if cache is stale
+        if (now - cacheTimestamp >= CACHE_DURATION) updateCache();
+
+    } else {
+        res.status(503).json({ error: 'Service unavailable. Please try again later.' });
+
+        // Fetch data and update cache immediately
+        updateCache();
     }
 });
+
+// Schedule a background cron-job to update the cache periodically
+cron.schedule('* * * * *', () => updateCache() );
 
 export default router;
