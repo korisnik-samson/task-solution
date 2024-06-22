@@ -12,6 +12,7 @@ The task is to create endpoint using Node.js (Typescript) that fetches a large d
 - **Caching**: The transformed data is cached to provide quick responses.
 - **Background Updates**: The cache is updated in the background periodically to keep the data fresh.
 - **Initial Cache Load**: The cache is pre-populated when the server starts to avoid delays on the first request.
+- **Security & Logging**: The endopint can be made secure from SQL Injection, DOS attacks via Express-Rate-Limits. Packages like `Winston` and `Morgan` were also considered as standard ways for logging info and error messages from the server instead of `console.log`
 
 ## Utilized Packages
 
