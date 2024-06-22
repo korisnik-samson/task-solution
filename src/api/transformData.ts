@@ -46,7 +46,7 @@ export function transformData(data: ApiResponse): TransformedData {
 }
 
 // Fetch and transform data from the external API, after which, cache is updated.
-async function updateCache() {
+async function updateCache(): Promise<void> {
     try {
         const response = await axios.get<ApiResponse>(apiUrl);
         cachedData = transformData(response.data);
@@ -60,7 +60,7 @@ async function updateCache() {
 }
 
 // avoid wait times by initiating the cache - fetch from external API
-export async function initCache() {
+export async function initCache(): Promise<void> {
     await updateCache();
 }
 
