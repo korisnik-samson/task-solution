@@ -19,4 +19,4 @@ The task is to create endpoint using Node.js (Typescript) that fetches a large d
 - **axios**: Promise-based HTTP client for making API requests.
 - **nodemon**: Utility for monitoring changes in source files and restarting the server.
 - **node-cron**: Task scheduler for running periodic jobs.
-- **typescript**: JavaScript superset that adds static types.
+- **typescript**: JavaScript superset that adds static types, and for type-saftey.
