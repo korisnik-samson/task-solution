@@ -8,11 +8,11 @@ const app = express();
 const PORT = Number(process.env.PORT || 3000);
 
 initCache().then(() => {
-    console.log('Cache initialized');
+    console.log('Cache initialized\n');
     app.use('/api/files', router);
 
     app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
+        console.log(`Server running on port ${PORT}\n`);
     });
 
     // if any errors with cache initialization
