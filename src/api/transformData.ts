@@ -24,6 +24,7 @@ export function transformData(data: ApiResponse): TransformedData {
 
         let currentLevel = transformed[ipAddress];
 
+        // Traverse the transformed object and create nested objects as needed
         pathSegments.forEach((segment, i) => {
             if (i === pathSegments.length - 1) {
                 // Add file name at the last level
@@ -52,7 +53,7 @@ async function updateCache(): Promise<void> {
         cachedData = transformData(response.data);
         cacheTimestamp = Date.now();
 
-        console.log('Cache updated at', new Date(cacheTimestamp).toLocaleString());
+        console.log('\nCache updated at', new Date(cacheTimestamp).toLocaleString());
 
     } catch (error) {
         console.error('Error fetching data:', error);
