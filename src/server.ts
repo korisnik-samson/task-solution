@@ -17,5 +17,5 @@ initCache().then(() => {
 
     // if any errors with cache initialization
 }).catch(error => {
-    console.error('Failed to initialize cache', error);
+    console.error('Failed to initialize cache', error.message);
 });

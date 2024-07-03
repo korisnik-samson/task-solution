@@ -3,11 +3,12 @@ import axios from "axios";
 import { ApiResponse, FileUrl, TransformedData } from "../types";
 import cron from "node-cron";
 
-const router = Router();
+const router: Router = Router();
 const apiUrl = process.env.API_URL || "https://rest-test-eight.vercel.app/api/test";
 
 let cachedData: TransformedData | null = null;
 let cacheTimestamp: number = 0;
+
 const CACHE_DURATION = Number(process.env.CACHE_DURATION) || 60000;
 
 export function transformData(data: ApiResponse): TransformedData {
@@ -28,7 +29,9 @@ export function transformData(data: ApiResponse): TransformedData {
         pathSegments.forEach((segment, i) => {
             if (i === pathSegments.length - 1) {
                 // Add file name at the last level
-                currentLevel.push(segment);
+                if (Array.isArray(currentLevel)) currentLevel.push(segment);
+                else console.error("Expected current level to be an array, but it was an object.");
+
             } else {
                 // Find or create the next level in the nested structure
                 let nextLevel = currentLevel.find(level => typeof level === "object" && level.hasOwnProperty(segment));
@@ -53,7 +56,7 @@ async function updateCache(): Promise<void> {
         cachedData = transformData(response.data);
         cacheTimestamp = Date.now();
 
-        console.log('\nCache updated at', new Date(cacheTimestamp).toLocaleString());
+        console.log('Cache updated at', new Date(cacheTimestamp).toLocaleString());
 
     } catch (error) {
         console.error('Error fetching data:', error);
