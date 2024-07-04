@@ -5,7 +5,20 @@
     "scripts": {
         "start": "ts-node-dev src/server.ts",
         "dev": "nodemon --exec ts-node-dev src/server.ts",
-        "test": "jest"
+        "test": "jest",
+        "test:watch": "jest --watch"
+    },
+    "jest": {
+        "preset": "ts-jest",
+        "testEnvironment": "node",
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js",
+            "jsx",
+            "json",
+            "node"
+        ]
     },
     "keywords": [],
     "author": "",
