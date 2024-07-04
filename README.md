@@ -6,6 +6,11 @@ This project implements an API endpoint `/api/files` that fetches data from an e
 
 The task is to create endpoint using Node.js (Typescript) that fetches a large dataset from an external API, transforms the data, and returns it to the user. The transformation involves restructuring the data into a nested format based on the URL paths. Given the large dataset and the delay from the external API, the solution must ensure that the user receives a response as quickly as possible.
 
+## THE IDEA
+* I've created a simple Express server that fetches data from an external API, transforms the data into a nested format based on the URL paths,
+* and serves it to the end user with minimal delay... How? Caching and Background Updates.
+
+
 ## Solution Summarized
 
 - **Data Transformation**: The data from the external API is transformed into a nested format based on URL paths.
@@ -21,3 +26,16 @@ The task is to create endpoint using Node.js (Typescript) that fetches a large d
 - **nodemon**: Utility for monitoring changes in source files and restarting the server.
 - **node-cron**: Task scheduler for running periodic jobs.
 - **typescript**: JavaScript superset that adds static types, and for type-saftey.
+
+## Project Structure
+- **src/**: Contains the source code.
+- **controllers/**: Contains the controller logic.
+- **routers/**: Contains the route definitions.
+- **utils/**: Contains utility functions.
+- **types/**: Contains TypeScript type definitions.
+- **app.ts**: Initializes the Express app.
+- **server.ts**: Starts the server.
+- **cache/**: Contains the cache files.
+- **.env**: Environment variables.
+- **package.json**: Project metadata and scripts.
+- **tsconfig.json**: TypeScript configuration.
