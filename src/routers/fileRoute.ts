@@ -4,7 +4,7 @@ import cron from 'node-cron';
 
 const router: Router = Router();
 
-router.get('/', async(_req: Request, res: Response) => {
+router.get('/', async (_req: Request, res: Response) => {
     try {
         const data = await getCachedData();
         res.json(data);

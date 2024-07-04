@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { initCache } from './utils/cache';
+import { initCache } from './controllers/fileController';
 import fileRouter from './routers/fileRoute';
 
 dotenv.config();
