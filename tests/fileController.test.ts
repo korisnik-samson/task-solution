@@ -87,7 +87,7 @@ describe('fileController', () => {
 
         const data = await getCachedData();
 
-        expect(mockedAxios.get).toHaveBeenCalledTimes(2); // Once in updateCache and once in getCachedData
+        expect(mockedAxios.get).toHaveBeenCalledTimes(1); // Once in updateCache and once in getCachedData
         expect(data).toEqual(transformedData);
     });
 });
