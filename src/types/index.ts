@@ -9,3 +9,7 @@ export interface ApiResponse {
 export interface TransformedData {
     [ipAddress: string]: Array<any>;
 }
+
+export interface DirectoryStructure {
+    [key: string]: any;
+}

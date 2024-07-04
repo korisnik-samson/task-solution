@@ -1,7 +1,7 @@
 import { transformData } from '../src/api/transformData';
 import { ApiResponse, TransformedData } from '../src/types';
 
-describe('transformData', () => {
+describe('transformData', (): void => {
     it('should transform data correctly', () => {
         const apiResponse: ApiResponse = {
             items: [
