@@ -14,6 +14,7 @@ export function transformData(urlObjects: FileUrl[]): DirectoryStructure {
         let currentLevel = result[ip];
 
         directories.forEach((dir) => {
+            // had issues with deprecation of hasOwnProperty
             let nextLevel = currentLevel.find((d: any) => d.hasOwnProperty(dir));
 
             if (!nextLevel) {

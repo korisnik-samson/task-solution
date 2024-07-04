@@ -9,11 +9,11 @@ const app = express();
 const PORT = Number(process.env.PORT || 3000);
 
 initCache().then(() => {
-    console.log('Cache initialized');
+    console.log('\nCache initialized');
     app.use('/api/files', fileRouter);
 
     app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
+        console.log(`\nServer running on port ${PORT}`);
     });
 
 }).catch(error => {

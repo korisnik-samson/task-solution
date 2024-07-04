@@ -9,7 +9,7 @@ router.get('/', async (_req: Request, res: Response) => {
         const data = await getCachedData();
         res.json(data);
 
-        updateCache(false);
+        await updateCache(false);
 
     } catch (error) {
         res.status(503).json({
