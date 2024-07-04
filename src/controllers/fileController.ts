@@ -6,7 +6,6 @@ import { transformData } from '../utils/transformData';
 const cacheDir = './cache';
 const cacheFilePath = `${cacheDir}/filesData.json`;
 const apiUrl = process.env.API_URL || 'https://rest-test-eight.vercel.app/api/test';
-const CACHE_DURATION = Number(process.env.CACHE_DURATION) || 60000;
 
 let cacheTimestamp: number = 0;
 let cachedData: TransformedData | null = null;
