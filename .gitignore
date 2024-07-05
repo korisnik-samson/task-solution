@@ -7,7 +7,7 @@ yarn-error.log
 logs/
 *.log
 
-# Dependency directories
+# Dependency directories... may be non-existent now but still, better safe than sorry
 jspm_packages/
 
 # dotenv environment variables file
