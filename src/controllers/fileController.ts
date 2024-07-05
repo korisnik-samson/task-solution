@@ -24,6 +24,7 @@ function readFromFile(): TransformedData | null {
         const fileContent = readFileSync(cacheFilePath, 'utf-8');
         return JSON.parse(fileContent) as TransformedData;
     }
+
     return null;
 }
 
@@ -35,9 +36,8 @@ export async function updateCache(isBackground: boolean): Promise<void> {
         cacheTimestamp = Date.now();
         saveToFile(transformedData);
 
-        if (!isBackground) {
-            console.log('Cache updated at', new Date(cacheTimestamp).toLocaleString());
-        }
+        if (!isBackground) console.log('Cache updated at', new Date(cacheTimestamp).toLocaleString());
+
 
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -62,6 +62,7 @@ export async function getCachedData(): Promise<TransformedData> {
 
 export async function initCache(): Promise<void> {
     const data = readFromFile();
+
     if (data) {
         cachedData = data;
         cacheTimestamp = Date.now();

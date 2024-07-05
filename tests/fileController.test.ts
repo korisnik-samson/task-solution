@@ -32,12 +32,12 @@ const transformedData: TransformedData = {
 describe('fileController', () => {
     beforeEach(async () => {
         jest.clearAllMocks();
-        if (await fs.stat(cacheFilePath).then(() => true).catch(() => false)) {
+
+        if (await fs.stat(cacheFilePath).then(() => true).catch(() => false))
             await fs.unlink(cacheFilePath);
-        }
-        if (await fs.stat(cacheDir).then(() => true).catch(() => false)) {
+
+        if (await fs.stat(cacheDir).then(() => true).catch(() => false))
             await fs.rmdir(cacheDir, { recursive: true });
-        }
     });
 
     test('initCache creates cache directory and loads cache from file if available', async () => {
@@ -61,8 +61,7 @@ describe('fileController', () => {
     });
 
     test('updateCache fetches data from API and updates cache', async () => {
-        mockedAxios.get.mockResolvedValue({ data: sampleApiData });
-
+        mockedAxios.get.mockResolvedValue({ data: sampleApiData })
         await updateCache(false);
         const data = await getCachedData();
 
