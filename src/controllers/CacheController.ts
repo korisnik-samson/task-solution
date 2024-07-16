@@ -51,7 +51,7 @@ export class CacheController {
             logInfo('Cache updated')
 
         } catch (error) {
-            console.error('Error updating cache:', error);
+            logInfo(`Error updating cache: ${error}`);
         }
     }
 
