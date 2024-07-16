@@ -1,32 +1,36 @@
-import { FileUrl, DirectoryStructure } from '../types';
+import { ApiResponse, NestedObject, TransformedData } from "../types";
 
-export function transformData(urlObjects: FileUrl[]): DirectoryStructure {
-    const result: DirectoryStructure = {};
+export function transformData(data: ApiResponse): TransformedData {
+    const transformed: TransformedData = {};
 
-    urlObjects.forEach((urlObject) => {
-        const url = urlObject.fileUrl;
-        const parts = url.split('/');
-        const ip = parts[2].split(':')[0];
-        const directories = parts.slice(3, -1);
-        const fileName = parts.pop()!;
+    data.items.forEach((item) => {
+        const url = new URL(item.fileUrl);
+        const ipAddress = url.hostname;
 
-        if (!result[ip]) result[ip] = [];
-        let currentLevel = result[ip];
+        const pathSegments = url.pathname.split('/').filter(Boolean);
 
-        directories.forEach((dir) => {
-            // had issues with deprecation of hasOwnProperty
-            let nextLevel = currentLevel.find((d: any) => d.hasOwnProperty(dir));
+        if (!transformed[ipAddress]) transformed[ipAddress] = [];
 
-            if (!nextLevel) {
-                nextLevel = { [dir]: [] };
-                currentLevel.push(nextLevel);
+        let currentLevel: (string | NestedObject)[] = transformed[ipAddress];
+
+        pathSegments.forEach((segment, i) => {
+            if (i === pathSegments.length - 1) {
+                currentLevel.push(segment);
+
+            } else {
+                let nextLevel: NestedObject | string | any = currentLevel.find(
+                    level => typeof level === 'object' && level.hasOwnProperty(segment)
+                );
+
+                if (!nextLevel) {
+                    nextLevel = { [segment]: [] };
+                    currentLevel.push(nextLevel);
+                }
+
+                currentLevel = nextLevel[segment];
             }
-
-            currentLevel = nextLevel[dir];
         });
-
-        if (Array.isArray(currentLevel)) currentLevel.push(fileName);
     });
 
-    return result;
+    return transformed;
 }

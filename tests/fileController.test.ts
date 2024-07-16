@@ -42,6 +42,7 @@ describe('fileController', () => {
             await fs.rmdir(cacheDir, { recursive: true });
     });
 
+    // break down this test into proper unit tests
     test('initCache creates cache directory and loads cache from file if available', async() => {
         await fs.mkdir(cacheDir, { recursive: true });
         await fs.writeFile(cacheFilePath, JSON.stringify(transformedData));
@@ -62,6 +63,7 @@ describe('fileController', () => {
         expect(data).toEqual(transformedData);
     });
 
+    // break down this test into proper unit tests
     test('updateCache fetches data from API and updates cache', async() => {
         mockedAxios.get.mockResolvedValue({ data: sampleApiData })
         await updateCache(false);

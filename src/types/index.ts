@@ -1,11 +1,21 @@
+import { CacheController } from "../controllers/CacheController";
+
+export interface ApiResponse {
+    items: FileUrl[];
+}
+
 export interface FileUrl {
     fileUrl: string;
 }
 
-export interface TransformedData {
-    [ipAddress: string]: Array<any>;
+export type TransformedData = {
+    [key: string]: (string | NestedObject)[];
+};
+
+export interface NestedObject {
+    [key: string]: string[];
 }
 
-export interface DirectoryStructure {
-    [key: string]: any;
+export interface ICacheController {
+    cacheService: CacheController;
 }
