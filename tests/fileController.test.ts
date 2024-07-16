@@ -6,16 +6,18 @@ import { initCache } from '../src/controllers/fileController';
 import { FileUrl, TransformedData } from '../src/types';
 
 jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+const mockedAxios: jest.Mocked<axios.AxiosStatic> = axios as jest.Mocked<typeof axios>;
 
 const cacheDir = './cache';
 const cacheFilePath = join(cacheDir, 'filesData.json');
+
 const sampleApiData: { items: FileUrl[] } = {
     items: [
         { fileUrl: 'http://127.0.0.1:8000/dir1/dir2/file1.txt' },
         { fileUrl: 'http://127.0.0.1:8000/dir1/file2.txt' }
     ]
 };
+
 const transformedData: TransformedData = {
     '127.0.0.1': [
         {
@@ -40,7 +42,7 @@ describe('fileController', () => {
             await fs.rmdir(cacheDir, { recursive: true });
     });
 
-    test('initCache creates cache directory and loads cache from file if available', async () => {
+    test('initCache creates cache directory and loads cache from file if available', async() => {
         await fs.mkdir(cacheDir, { recursive: true });
         await fs.writeFile(cacheFilePath, JSON.stringify(transformedData));
 
@@ -50,8 +52,8 @@ describe('fileController', () => {
         expect(data).toEqual(transformedData);
     });
 
-    test('initCache updates cache if file is not available', async () => {
-        mockedAxios.get.mockResolvedValue({ data: sampleApiData });
+    test('initCache updates cache if file is not available', async() => {
+        mockedAxios.get.mockResolvedValue({ data: sampleApiData })
 
         await initCache();
         const data = await getCachedData();
@@ -60,7 +62,7 @@ describe('fileController', () => {
         expect(data).toEqual(transformedData);
     });
 
-    test('updateCache fetches data from API and updates cache', async () => {
+    test('updateCache fetches data from API and updates cache', async() => {
         mockedAxios.get.mockResolvedValue({ data: sampleApiData })
         await updateCache(false);
         const data = await getCachedData();
@@ -69,7 +71,7 @@ describe('fileController', () => {
         expect(data).toEqual(transformedData);
     });
 
-    test('getCachedData returns cached data if available', async () => {
+    test('getCachedData returns cached data if available', async() => {
         mockedAxios.get.mockResolvedValue({ data: sampleApiData });
 
         await updateCache(false);
@@ -78,7 +80,7 @@ describe('fileController', () => {
         expect(data).toEqual(transformedData);
     });
 
-    test('getCachedData updates cache if data is not available', async () => {
+    test('getCachedData updates cache if data is not available', async() => {
         mockedAxios.get.mockResolvedValue({ data: sampleApiData });
 
         await updateCache(false);

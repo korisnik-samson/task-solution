@@ -38,7 +38,6 @@ export async function updateCache(isBackground: boolean): Promise<void> {
 
         if (!isBackground) console.log('Cache updated at', new Date(cacheTimestamp).toLocaleString());
 
-
     } catch (error) {
         console.error('Error fetching data:', error);
     }
@@ -67,6 +66,7 @@ export async function initCache(): Promise<void> {
         cachedData = data;
         cacheTimestamp = Date.now();
         console.log('Cache loaded from file');
+
     } else {
         await updateCache(false);
     }

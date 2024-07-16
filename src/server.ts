@@ -1,12 +1,12 @@
-import express from 'express';
+import express, { Express } from 'express';
 import dotenv from 'dotenv';
 import { initCache } from './controllers/fileController';
 import fileRouter from './routers/fileRoute';
 
 dotenv.config();
 
-const app = express();
-const PORT = Number(process.env.PORT || 3000);
+const app: Express = express();
+const PORT = Number(process.env.PORT || 4000);
 
 initCache().then(() => {
     console.log('\nCache initialized');
