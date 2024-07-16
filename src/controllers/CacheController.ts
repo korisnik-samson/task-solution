@@ -1,20 +1,22 @@
-import { ApiResponse, TransformedData } from '../types';
-import { DataFetcherController } from './DataFetcherController';
+import { ApiResponse, IDataService, TransformedData } from '../types';
 import fs from 'fs';
 import path from 'path';
 import { transformData } from "../utils/transformData";
 import { logInfo } from "../utils/logger";
+import { inject, injectable } from "tsyringe";
 
 const CACHE_FILE_PATH = path.resolve(__dirname, '../../cache.json');
 const CACHE_DURATION = Number(process.env.CACHE_DURATION) || 60000;
 
+@injectable()
 export class CacheController {
     private cachedData: TransformedData | null = null;
     private cacheTimestamp: number = 0;
-    private dataFetcher: DataFetcherController;
+    private dataService: IDataService;
 
-    constructor(dataFetcher: DataFetcherController) {
-        this.dataFetcher = dataFetcher;
+    // @ts-ignore
+    constructor(@inject('IDataService') dataService: IDataService) {
+        this.dataService = dataService;
     }
 
     public async initializeCache() {
@@ -36,12 +38,13 @@ export class CacheController {
         if (this.cachedData && now - this.cacheTimestamp < CACHE_DURATION)
             return this.cachedData;
 
+        logInfo('Cache not found or expired')
         return null;
     }
 
     public async updateCache() {
         try {
-            const apiResponse = await this.dataFetcher.fetchData();
+            const apiResponse = await this.dataService.fetchData();
             this.cachedData = this.transformData(apiResponse);
             this.cacheTimestamp = Date.now();
 

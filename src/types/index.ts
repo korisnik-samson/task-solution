@@ -19,3 +19,7 @@ export interface NestedObject {
 export interface ICacheController {
     cacheService: CacheController;
 }
+
+export interface IDataService {
+    fetchData(): Promise<ApiResponse>;
+}
