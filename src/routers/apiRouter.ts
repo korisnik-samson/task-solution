@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { ICacheController, TransformedData } from "../types";
-import { logError, logInfo } from "../utils/logger";
+import { logError, logInfo } from "../lib/logger";
 
 const router = Router();
 

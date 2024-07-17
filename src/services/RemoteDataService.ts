@@ -12,7 +12,7 @@ export class RemoteDataService implements IDataService {
     }
 
     public async fetchData(): Promise<ApiResponse> {
-        const response = await axios.get<ApiResponse>(this.apiUrl);
+        const response: axios.AxiosResponse<ApiResponse> = await axios.get<ApiResponse>(this.apiUrl);
         return response.data;
     }
 }

@@ -1,15 +1,15 @@
-import { ApiResponse, TransformedData } from '../types';
+import { inject, injectable } from 'tsyringe';
 import { IDataService } from '../services/IDataService';
+import { ApiResponse, NestedObject, TransformedData } from '../types';
 import fs from 'fs';
 import path from 'path';
-import { transformData } from "../utils/transformData";
-import { logInfo } from "../utils/logger";
-import { injectable, autoInjectable, inject, singleton } from "tsyringe";
+import { logError, logInfo } from "../lib/logger";
+import { transformData } from "../lib/transformData";
 
 const CACHE_FILE_PATH = path.resolve(__dirname, '../../cache.json');
 const CACHE_DURATION = Number(process.env.CACHE_DURATION) || 60000;
 
-@autoInjectable()
+@injectable()
 export class CacheController {
     private cachedData: TransformedData | null = null;
     private cacheTimestamp: number = 0;
@@ -39,23 +39,20 @@ export class CacheController {
         if (this.cachedData && now - this.cacheTimestamp < CACHE_DURATION)
             return this.cachedData;
 
-        logInfo('Cache not found or expired')
         return null;
     }
 
     public async updateCache() {
         try {
             const apiResponse = await this.dataService.fetchData();
-            this.cachedData = this.transformData(apiResponse);
+            this.cachedData = this.transformResponse(apiResponse);
             this.cacheTimestamp = Date.now();
 
             fs.writeFileSync(CACHE_FILE_PATH, JSON.stringify(this.cachedData), 'utf-8');
-            console.log('Cache created at', new Date(this.cacheTimestamp).toLocaleString());
-
-            logInfo('Cache updated')
+            logInfo(`Cache updated at ${new Date(this.cacheTimestamp).toLocaleString()}`);
 
         } catch (error) {
-            logInfo(`Error updating cache: ${error}`);
+            logError(`Error updating cache: ${error}`);
         }
     }
 
@@ -64,7 +61,7 @@ export class CacheController {
             await this.updateCache();
     }
 
-    private transformData(data: ApiResponse): TransformedData {
+    private transformResponse(data: ApiResponse): TransformedData {
         return transformData(data);
     }
 }

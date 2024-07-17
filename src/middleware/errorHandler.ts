@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { logError } from "../utils/logger";
+import { logError } from "../lib/logger";
 
 export function errorHandler(err: any, _req: Request, res: Response, _next: NextFunction) {
     logError(err);
