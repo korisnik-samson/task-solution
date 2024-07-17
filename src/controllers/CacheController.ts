@@ -1,27 +1,28 @@
-import { ApiResponse, IDataService, TransformedData } from '../types';
+import { ApiResponse, TransformedData } from '../types';
+import { IDataService } from '../services/IDataService';
 import fs from 'fs';
 import path from 'path';
 import { transformData } from "../utils/transformData";
 import { logInfo } from "../utils/logger";
-import { inject, injectable } from "tsyringe";
+import { injectable, autoInjectable, inject, singleton } from "tsyringe";
 
 const CACHE_FILE_PATH = path.resolve(__dirname, '../../cache.json');
 const CACHE_DURATION = Number(process.env.CACHE_DURATION) || 60000;
 
-@injectable()
+@autoInjectable()
 export class CacheController {
     private cachedData: TransformedData | null = null;
     private cacheTimestamp: number = 0;
     private dataService: IDataService;
 
-    // @ts-ignore
-    constructor(@inject('IDataService') dataService: IDataService) {
+    constructor(@inject("IDataService") dataService: IDataService) {
         this.dataService = dataService;
     }
 
     public async initializeCache() {
         if (fs.existsSync(CACHE_FILE_PATH)) {
             const data = fs.readFileSync(CACHE_FILE_PATH, 'utf-8');
+
             this.cachedData = JSON.parse(data);
             this.cacheTimestamp = Date.now();
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import 'reflect-metadata';
-import { container } from 'tsyringe';
+import { container, Lifecycle } from 'tsyringe';
 import { CacheController } from "./controllers/CacheController";
 import { DataFetcherController } from "./controllers/DataFetcherController";
 import { errorHandler } from './middleware/errorHandler';
@@ -10,15 +10,15 @@ import * as process from "node:process";
 import { RemoteDataService } from "./services/RemoteDataService";
 import { LocalDataService } from "./services/LocalDataService";
 
-container.register('IDataService', {
-    useClass: process.env.NODE_ENV === 'production' ? RemoteDataService : LocalDataService,
-})
+container.register('IDataService',
+    { useClass: process.env.NODE_ENV! === 'production' ? RemoteDataService : LocalDataService, },
+    { lifecycle: Lifecycle.Singleton, }
+)
 
 const app: express.Express = express();
 const PORT = process.env.PORT || 3001;
 
-const dataFetcher = new DataFetcherController(process.env.API_URL || "https://rest-test-eight.vercel.app/api/test");
-const cacheService = new CacheController(dataFetcher);
+const cacheService = container.resolve(CacheController);
 
 app.use('/api', AppRouter({ cacheService }));
 app.use(errorHandler);

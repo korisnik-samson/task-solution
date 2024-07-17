@@ -1,4 +1,5 @@
 import { CacheController } from "../controllers/CacheController";
+import { singleton } from "tsyringe";
 
 export interface ApiResponse {
     items: FileUrl[];
@@ -18,8 +19,4 @@ export interface NestedObject {
 
 export interface ICacheController {
     cacheService: CacheController;
-}
-
-export interface IDataService {
-    fetchData(): Promise<ApiResponse>;
 }

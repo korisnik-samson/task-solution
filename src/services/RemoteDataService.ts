@@ -1,6 +1,6 @@
 import { injectable } from 'tsyringe';
 import axios from 'axios';
-import { IDataService } from '../types';
+import { IDataService } from './IDataService';
 import { ApiResponse } from '../types';
 
 @injectable()
