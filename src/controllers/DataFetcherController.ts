@@ -9,7 +9,7 @@ export class DataFetcherController {
     }
 
     public async fetchData(): Promise<ApiResponse> {
-        const response = await axios.get<ApiResponse>(this.apiUrl);
+        const response: axios.AxiosResponse<ApiResponse, any> = await axios.get<ApiResponse>(this.apiUrl);
         return response.data;
     }
 }
