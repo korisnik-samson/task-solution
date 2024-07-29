@@ -6,7 +6,7 @@ import { transformData } from "../utils/transformData";
 import { logInfo } from "../utils/logger";
 
 const CACHE_FILE_PATH = path.resolve(__dirname, '../../cache.json');
-const CACHE_DURATION = Number(process.env.CACHE_DURATION) || 60000;
+// const CACHE_DURATION = Number(process.env.CACHE_DURATION) || 60000;
 
 export class CacheController {
     private cachedData: TransformedData | null = null;
@@ -20,6 +20,7 @@ export class CacheController {
     public async initializeCache() {
         if (fs.existsSync(CACHE_FILE_PATH)) {
             const data = fs.readFileSync(CACHE_FILE_PATH, 'utf-8');
+
             this.cachedData = JSON.parse(data);
             this.cacheTimestamp = Date.now();
 
@@ -33,10 +34,9 @@ export class CacheController {
     public getCachedData(): TransformedData | null {
         const now = Date.now();
 
-        if (this.cachedData && now - this.cacheTimestamp < CACHE_DURATION)
-            return this.cachedData;
+        // if (this.cachedData && now - this.cacheTimestamp < CACHE_DURATION) return this.cachedData;
 
-        return null;
+        return this.cachedData;
     }
 
     public async updateCache() {
@@ -56,8 +56,8 @@ export class CacheController {
     }
 
     public async updateCacheInBackground() {
-        if (Date.now() - this.cacheTimestamp >= CACHE_DURATION)
-            await this.updateCache();
+        //if (Date.now() - this.cacheTimestamp >= CACHE_DURATION)
+        await this.updateCache();
     }
 
     private transformData(data: ApiResponse): TransformedData {
