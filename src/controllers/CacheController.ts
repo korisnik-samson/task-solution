@@ -32,8 +32,7 @@ export class CacheController {
     }
 
     public getCachedData(): TransformedData | null {
-        const now = Date.now();
-
+        // const now = Date.now();
         // if (this.cachedData && now - this.cacheTimestamp < CACHE_DURATION) return this.cachedData;
 
         return this.cachedData;
@@ -56,7 +55,7 @@ export class CacheController {
     }
 
     public async updateCacheInBackground() {
-        //if (Date.now() - this.cacheTimestamp >= CACHE_DURATION)
+        // if (Date.now() - this.cacheTimestamp >= CACHE_DURATION)
         await this.updateCache();
     }
 
